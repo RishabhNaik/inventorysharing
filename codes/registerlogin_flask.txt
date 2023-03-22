@@ -1,0 +1,94 @@
+from flask import Flask, render_template, request, session, redirect, url_for
+from web3 import Web3, HTTPProvider
+from web3.middleware import geth_poa_middleware
+import json
+
+# Set up the Flask app
+app = Flask(__name__)
+app.secret_key = 'secret_key'
+
+# Connect to the Ethereum network
+web3 = Web3(HTTPProvider('http://localhost:8545'))
+web3.middleware_onion.inject(geth_poa_middleware, layer=0)
+
+# Load the smart contract ABI and address
+with open('UserRegistry.abi', 'r') as abi_definition:
+    abi = json.load(abi_definition)
+
+contract_address = '0x1234567890123456789012345678901234567890'
+
+# Create an instance of the contract
+contract_instance = web3.eth.contract(abi=abi, address=contract_address)
+
+# Function to get the Ethereum address associated with a username
+def get_address(username):
+    return contract_instance.functions.getAddress(username).call()
+
+# Login route
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Get the form data
+        username = request.form['username']
+        password = request.form['password']
+
+        # Get the Ethereum address associated with the username
+        user_address = get_address(username)
+
+        # Check that the Ethereum address matches the password
+        if user_address and web3.personal.ecRecover(password, username) == user_address:
+            # Save the user's address in the session
+            session['user_address'] = user_address
+            return redirect(url_for('home'))
+        else:
+            # Login failed, show an error message
+            error = 'Invalid username or password'
+            return render_template('login.html', error=error)
+    else:
+        # Show the login form
+        return render_template('login.html')
+
+# Registration route
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        # Get the form data
+        username = request.form['username']
+        password = request.form['password']
+
+        # Generate an Ethereum address for the user using the password and username
+        user_address = web3.personal.newAccount(password, username)
+
+        # Register the user in the smart contract
+        contract_instance.functions.registerUser(username).transact({'from': user_address})
+
+        # Login the user and redirect to the home page
+        session['user_address'] = user_address
+        return redirect(url_for('home'))
+    else:
+        # Show the registration form
+        return render_template('register.html')
+
+# Home page route
+@app.route('/')
+def home():
+    # Make sure the user is logged in
+    if 'user_address' not in session:
+        return redirect(url_for('login'))
+
+    # Get the user's Ethereum address from the session
+    user_address = session['user_address']
+
+    return render_template('home.html', user_address=user_address)
+
+# Logout route
+@app.route('/logout')
+def logout():
+    # Clear the user's session data
+    session.pop('user_address', None)
+
+    # Redirect to the login page
+    return redirect(url_for('login'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
