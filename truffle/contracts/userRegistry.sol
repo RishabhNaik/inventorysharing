@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 contract UserRegistry {
@@ -14,38 +15,41 @@ contract UserRegistry {
         UserType userType;
     }
 
-    // Array of all registered users
-    User[] private users;
+    // Dynamic array of all registered users
+    User[] public users;
 
     // Mapping of usernames to user indices
-    mapping(string => uint) private usernameToIndex;
+    mapping(string => uint) public usernameToUserIndex;
 
     // Event that is emitted when a user is registered
-    event UserRegistered(string username, address userAddress, UserType userType);
+    event UserRegistered(
+        string username,
+        address userAddress,
+        UserType userType
+    );
 
     // Function to register a new user
     function registerUser(string memory username, UserType userType) public {
         // Make sure the username is not already taken
-        require(usernameToIndex[username] == 0, "Username is already taken");
+        require(
+            usernameToUserIndex[username] == 0,
+            "Username is already taken"
+        );
 
         // Create a new User struct and add it to the array
         User memory user = User(msg.sender, username, userType);
-        uint index = users.push(user);
+        users.push(user);
+        uint index = users.length;
 
         // Add the new user's index to the mapping
-        usernameToIndex[username] = index;
+        usernameToUserIndex[username] = index;
 
         // Emit the UserRegistered event
         emit UserRegistered(username, msg.sender, userType);
     }
 
-    // Function to get the Ethereum address associated with a username
-    function getAddress(string memory username) public view returns (address) {
-        return users[usernameToIndex[username] - 1].userAddress;
-    }
-
-    // Function to get the user type associated with a username
-    function getUserType(string memory username) public view returns (UserType) {
-        return users[usernameToIndex[username] - 1].userType;
+    // Function to get the user associated with a username
+    function getUser(string memory username) public view returns (User memory) {
+        return users[usernameToUserIndex[username] - 1];
     }
 }
