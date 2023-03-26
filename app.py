@@ -11,6 +11,7 @@ app = Flask(__name__, template_folder='templates')
 app.debug = True
 
 
+
 # Connect to the Ethereum network
 # web3 = Web3(HTTPProvider('http://localhost:7545'))
 # web3.middleware_onion.inject(geth_poa_middleware, layer=0)
@@ -53,7 +54,7 @@ def login():
             #return render_template('login.html', error=error)
    # else:
         # Show the login form
-        return render_template('login.html')
+    return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -124,6 +125,17 @@ def item_view():
 def profile():
 
     return render_template("profile.html")
+
+
+@app.route('/demo')
+def demo():
+
+    return render_template("demo.html")
+
+@app.route('/cart')
+def cart():
+
+    return render_template("cart.html")
 
 if __name__ == '__main__':
     app.run()

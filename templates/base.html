@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <title>{% block title %} {% endblock %}</title>
     {% include 'include/styles.html' %}
+    
 </head>
 
 <body>
-{% include './include/navbar.html' %} 
+{% include 'include/navbar.html' %} 
 
 {% block content %} 
 
@@ -20,10 +21,10 @@
 
 
 
-{% include './include/footer.html' %} 
+{% include 'include/footer.html' %} 
 
 
-{% include './include/scripts.html' %}
+{% include 'include/scripts.html' %}
 
 
 
