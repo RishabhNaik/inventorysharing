@@ -6,7 +6,8 @@ from web3 import Web3, HTTPProvider
 # import json
 # import app
 
-app = Flask(__name__) 
+app = Flask(__name__, template_folder='templates')
+ 
 app.debug = True
 
 
@@ -108,8 +109,21 @@ def logout():
     return redirect(url_for('login'))
 
 
+@app.route('/item')
+def item():
+
+    return render_template("item.html")
 
 
+@app.route('/item_view')
+def item_view():
+
+    return render_template("item_view.html")
+
+@app.route('/profile')
+def profile():
+
+    return render_template("profile.html")
 
 if __name__ == '__main__':
     app.run()

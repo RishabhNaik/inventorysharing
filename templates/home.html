@@ -1,83 +1,14 @@
-<html lang="en">
+{% extends "base.html" %}
+{% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="../assets/css/home.css"> -->
-    <title>Document</title>
-</head>
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
     
-    nav {
-        background-color: #333;
-        color: #fff;
-        padding: 10px;
-    }
-    
-    nav ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        margin-left: 75rem;
-        align-items: center;
-    }
-    
-    nav li {
-        margin: 0 10px;
-    }
-    
-    nav a {
-        color: #fff;
-        text-decoration: none;
-        margin-right: 20px;
-    }
-    
-    nav a:hover {
-        color: #ccc;
-    }
-    
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    
-    h1 {
-        font-size: 36px;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-    
-    p {
-        font-size: 18px;
-        line-height: 1.5;
-        margin-bottom: 10px;
-    }
-</style>
-
-<body>
-    <nav>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="/register">Sign up</a></li>
-            <li><a href="/login">Sign in</a></li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        <h1>sambhram institute of technology</h1>
-        <p>Inventory Sharing Using Ethereum Blockchain and Smart Contracts
-        </p>
+<div class="container mt-5">
+    <h1 class="text-center">Inventory Sharing Using Ethereum Blockchain and Smart Contracts</h1>
+    <p class="lead text-center">Welcome to Sambhram Institute Of Technology</p>
+    <div class="text-center">
+        <a href="/item_view" class="btn btn-primary">View Items</a>
     </div>
-</body>
+</div>
 
-</html>
+
+{% endblock %}
