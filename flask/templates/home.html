@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home</title>
+  </head>
+  <body>
+    <h1>Welcome, {{ username }}</h1>
+    <p>Your user type is {{ user_type }}</p>
+    <form method="POST" action="{{ url_for('logout') }}">
+      <input type="submit" value="Logout" />
+    </form>
+  </body>
+</html>
