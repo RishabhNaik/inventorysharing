@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 contract UserRegistry {
@@ -11,15 +10,11 @@ contract UserRegistry {
     // Struct to represent a user
     struct User {
         address userAddress;
-        string username;
         UserType userType;
     }
 
-    // Dynamic array of all registered users
-    User[] public users;
-
-    // Mapping of usernames to user indices
-    mapping(string => uint) public usernameToUserIndex;
+    // Mapping of usernames to users
+    mapping(string => User) private users;
 
     // Event that is emitted when a user is registered
     event UserRegistered(
@@ -32,24 +27,27 @@ contract UserRegistry {
     function registerUser(string memory username, UserType userType) public {
         // Make sure the username is not already taken
         require(
-            usernameToUserIndex[username] == 0,
+            users[username].userAddress == address(0),
             "Username is already taken"
         );
 
-        // Create a new User struct and add it to the array
-        User memory user = User(msg.sender, username, userType);
-        users.push(user);
-        uint index = users.length;
-
-        // Add the new user's index to the mapping
-        usernameToUserIndex[username] = index;
+        // Create a new User struct and add it to the mapping
+        User memory user = User(msg.sender, userType);
+        users[username] = user;
 
         // Emit the UserRegistered event
         emit UserRegistered(username, msg.sender, userType);
     }
 
-    // Function to get the user associated with a username
-    function getUser(string memory username) public view returns (User memory) {
-        return users[usernameToUserIndex[username] - 1];
+    // Function to get the Ethereum address associated with a username
+    function getAddress(string memory username) public view returns (address) {
+        return users[username].userAddress;
+    }
+
+    // Function to get the user type associated with a username
+    function getUserType(
+        string memory username
+    ) public view returns (UserType) {
+        return users[username].userType;
     }
 }

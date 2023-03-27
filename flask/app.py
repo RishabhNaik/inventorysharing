@@ -17,7 +17,7 @@ with open('truffle/build/contracts/UserRegistry.json', 'r') as abi_definition:
 abi = info_abi['abi']  # Paste the ABI of the UserRegistry contract here
 
 # Paste the address of the UserRegistry contract here
-contract_address = '0xB3c4a1ca9AFC0d8959376BF24160993738218Ef9'
+contract_address = '0xEfd61c59754a0eB4e17e871E83659a3236F1DC4C'
 
 # Get the contract instance
 contract_instance = w3.eth.contract(address=contract_address, abi=abi)
@@ -114,5 +114,5 @@ def home():
 @app.route('/logout')
 def logout():
     # Remove the username from the session
-    session.pop('username', None)
+    session.clear()
     return redirect(url_for('login'))
