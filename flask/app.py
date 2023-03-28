@@ -4,7 +4,7 @@ from web3.middleware import geth_poa_middleware
 import json
 
 app = Flask(__name__)
-app.secret_key = 'Xavi3r'
+app.debug=True
 
 # Connect to web3 provider
 w3 = Web3(HTTPProvider('http://127.0.0.1:8545'))
@@ -17,7 +17,7 @@ with open('truffle/build/contracts/UserRegistry.json', 'r') as abi_definition:
 abi = info_abi['abi']  # Paste the ABI of the UserRegistry contract here
 
 # Paste the address of the UserRegistry contract here
-contract_address = '0xEfd61c59754a0eB4e17e871E83659a3236F1DC4C'
+contract_address = '0x38B756a9f5592a6133BDe2EE093E814204ca93BF'
 
 # Get the contract instance
 contract_instance = w3.eth.contract(address=contract_address, abi=abi)
