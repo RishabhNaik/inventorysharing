@@ -2,80 +2,46 @@
 pragma solidity ^0.8.0;
 
 contract UserRegistry {
-    // Enum to represent the user types
     enum UserType {
+        None,
         Supplier,
         Retailer
     }
 
-    // Struct to represent a user
     struct User {
         address userAddress;
         UserType userType;
         string username;
     }
 
-    // Array of all registered users
-    User[] private users;
+    mapping(string => User) private usernameToUser;
+    mapping(address => string) private addressToUsername;
 
-    // Function to get the index of the user in the users array given a username
-    function usernameToUserIndex(string memory username) public view returns (uint) {
-        for (uint i = 0; i < users.length; i++) {
-            if (keccak256(bytes(users[i].username)) == keccak256(bytes(username))) {
-                return i;
-            }
-        }
-        return uint(-1);
+    function registerUser(string memory username, UserType userType) public {
+        require(bytes(username).length > 0, "Username cannot be empty");
+        require(usernameToUser[username].userAddress == address(0), "Username is already taken");
+        address userAddress = msg.sender;
+        User memory user = User(userAddress, userType, username);
+        usernameToUser[username] = user;
+        addressToUsername[userAddress] = username;
     }
 
-    // Event that is emitted when a user is registered
-    event UserRegistered(
-        string username,
-        address userAddress,
-        UserType userType
-    );
-
-    // Function to register a new user
-function usernameToUserIndex(string memory username) public view returns (uint) {
-    for (uint i = 0; i < users.length; i++) {
-        if (keccak256(bytes(users[i].username)) == keccak256(bytes(username))) {
-            return i;
-        }
-    }
-    return type(uint256).max;
-}
-
-        // Create a new User struct and add it to the array
-        User memory user = User(msg.sender, userType, username);
-        uint userIndex = users.length;
-        users.push(user);
-
-        // Emit the UserRegistered event
-        emit UserRegistered(username, msg.sender, userType);
+    function getUserType(string memory username) public view returns (UserType) {
+        User memory user = usernameToUser[username];
+        require(user.userAddress != address(0), "User does not exist");
+        return user.userType;
     }
 
-    // Function to get the Ethereum address associated with a username
-function getAddress(string memory username) public view returns (address) {
-    uint index = usernameToUserIndex(username);
-    require(index != type(uint256).max, "User does not exist");
-    return users[index].userAddress;
-}
+    function getAddress(string memory username) public view returns (address) {
+        User memory user = usernameToUser[username];
+        require(user.userAddress != address(0), "User does not exist");
+        return user.userAddress;
+    }
 
-    // Function to get the user type associated with a username
- function getUserType(string memory username) public view returns (UserType) {
-    uint index = usernameToUserIndex(username);
-    require(index != type(uint256).max, "User does not exist");
-    return users[index].userType;
-}
-
-    // Function to update a user's information
-    function updateUser(
-        string memory username,
-        UserType userType
-    ) public {
-        uint index = usernameToUserIndex(username);
-        require(index != uint(-1), "User does not exist");
-        require(users[index].userAddress == msg.sender, "Only the user can update their information");
-        users[index].userType = userType;
+    function getUsername() public view returns (string memory) {
+        address userAddress = msg.sender;
+        string memory username = addressToUsername[userAddress];
+        require(bytes(username).length > 0, "User does not exist");
+        return username;
     }
 }

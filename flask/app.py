@@ -4,6 +4,7 @@ from web3.middleware import geth_poa_middleware
 import json
 
 app = Flask(__name__)
+app.secret_key='xavi3r'
 app.debug=True
 
 # Connect to web3 provider
@@ -17,7 +18,7 @@ with open('truffle/build/contracts/UserRegistry.json', 'r') as abi_definition:
 abi = info_abi['abi']  # Paste the ABI of the UserRegistry contract here
 
 # Paste the address of the UserRegistry contract here
-contract_address = '0x38B756a9f5592a6133BDe2EE093E814204ca93BF'
+contract_address = '0xF52b9E99074b9475dB85762246eA8eBF69E5822a'
 
 # Get the contract instance
 contract_instance = w3.eth.contract(address=contract_address, abi=abi)
@@ -67,33 +68,36 @@ def register():
         password = request.form['password']
         user_type = request.form['user_type']
         # Check if the username is already taken
-        if contract_instance.functions.usernameToUserIndex(username).call() > 0:
+        try:
+            existing_user = contract_instance.functions.getUser(username).call()
             error = 'Username is already taken'
             return render_template('register.html', error=error)
-        else:
-            # Create a new account and import it
-            new_account = w3.eth.account.create()
-            w3.geth.personal.import_raw_key(
-                new_account._private_key.hex(), password)
-            # Unlock the new account
-            w3.geth.personal.unlock_account(new_account.address, password)
+        except:
+            pass
+        # Create a new account and import it
+        new_account = w3.eth.account.create()
+        w3.geth.personal.import_raw_key(
+            new_account._private_key.hex(), password)
+        # Unlock the new account
+        w3.geth.personal.unlock_account(new_account.address, password)
 
-            tx_hash = w3.eth.send_transaction({
-                'from': w3.eth.coinbase,
-                'to': new_account.address,
-                'value': w3.to_wei(10000000000000000, 'ether')
-            })
-            w3.eth.wait_for_transaction_receipt(tx_hash)
-            # Register the new user
-            contract_instance.functions.registerUser(
-                username, int(user_type)).transact({'from': new_account.address})
-            # Lock the account
-            w3.geth.personal.lock_account(new_account.address)
-            # Store the username in the session
-            session['username'] = username
-            return redirect(url_for('home'))
+        tx_hash = w3.eth.send_transaction({
+            'from': w3.eth.coinbase,
+            'to': new_account.address,
+            'value': w3.to_wei(10000000000000000, 'ether')
+        })
+        w3.eth.wait_for_transaction_receipt(tx_hash)
+        # Register the new user
+        contract_instance.functions.registerUser(
+            username, int(user_type)).transact({'from': new_account.address})
+        # Lock the account
+        w3.geth.personal.lock_account(new_account.address)
+        # Store the username in the session
+        session['username'] = username
+        return redirect(url_for('home'))
     else:
         return render_template('register.html')
+
 # Define the home route
 
 
@@ -111,8 +115,9 @@ def home():
 # Define the logout route
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['GET','POST'])
 def logout():
     # Remove the username from the session
     session.clear()
     return redirect(url_for('login'))
+
