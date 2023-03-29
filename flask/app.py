@@ -165,3 +165,14 @@ def s_inventory():
 def checkout_page():
 
     return render_template("checkout_page.html")
+
+@app.route('/create_session')
+def create_session():
+    session['name'] = 'Gagz'
+    # return ''
+    return redirect(url_for('login'))
+
+@app.route('/destroy_session')
+def destroy_session():
+    session.pop('name', None)
+    return redirect(url_for('login'))

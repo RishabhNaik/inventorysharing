@@ -17,11 +17,21 @@
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto active" href="/">Home</a></li>
+          <li><a class="nav-link scrollto active" href="/">{{session.my_session}} Home</a></li>
           <li><a class="nav-link scrollto" href="#about">About Us</a></li>
           <li><a class="nav-link scrollto" href="#services">Services</a></li>
-          <li><a class="nav-link scrollto" href="#portfolio">Portfolio</a></li>
           <li><a class="nav-link scrollto" href="#team">Team</a></li>
+
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          {% if session['name'] %}
+                    <li class="nav-item"><a class="nav-link" >Hello,{{session.name}} </a></li>
+                    <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+          {% else %}
+
+                    <li class="nav-item"><a class="nav-link" href="/register">Sign up</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+          {% endif %}
+
           <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="#">Drop Down 1</a></li>
@@ -34,13 +44,15 @@
                   <li><a href="/cart">Cart</a></li>
                   <li><a href="/main_inventory">Main_inventory</a></li>
                   <li><a href="/checkout_page">Checkout_Page</a></li>
+                  <li><a href="/session_change">change</a></li>
                 
                 
              
             </ul>
           </li>
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          <li><a class="getstarted scrollto" href="#about">Get Started</a></li>
+
+
+          
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
