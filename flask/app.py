@@ -8,7 +8,7 @@ app.secret_key='xavi3r'
 app.debug=True
 
 # Connect to web3 provider
-w3 = Web3(HTTPProvider('http://127.0.0.1:8545'))
+w3 = Web3(HTTPProvider('https://99cf-157-45-38-25.in.ngrok.io'))
 w3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
 # Define the contract ABI and address
