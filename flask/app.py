@@ -121,3 +121,47 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
+@app.route('/s_add_item')
+def s_add_item():
+
+    return render_template("s_add_item.html")
+
+
+@app.route('/s_item_view')
+def s_item_view():
+
+    return render_template("s_item_view.html")
+
+@app.route('/profile')
+def profile():
+
+    return render_template("profile.html")
+
+
+@app.route('/demo')
+def demo():
+
+    return render_template("demo.html")
+
+@app.route('/cart')
+def cart():
+
+    return render_template("cart.html")
+
+
+@app.route('/main_inventory')
+def main_inventory():
+
+    return render_template("main_inventory.html")
+
+
+@app.route('/s_inventory')
+def s_inventory():
+
+    return render_template("s_inventory.html")
+
+
+@app.route('/checkout_page')
+def checkout_page():
+
+    return render_template("checkout_page.html")
