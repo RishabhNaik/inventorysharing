@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>{% block title %}Product View Page{% endblock %}</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <style>
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         }
+         body {
+         font-family: Arial, sans-serif;
+         background-color: #f4f4f4;
+         }
+         .container {
+         max-width: 100%;
+         margin: 0 auto;
+         padding: 0;
+         display: flex;
+         flex-wrap: wrap;
+         justify-content: center;
+         }
+         .card {
+         width: 300px;
+         background-color: #fff;
+         border-radius: 5px;
+         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+         margin: 20px;
+         }
+         .card img {
+         width: 100%;
+         height: 200px;
+         object-fit: cover;
+         border-top-left-radius: 5px;
+         border-top-right-radius: 5px;
+         }
+         .card-content {
+         padding: 20px;
+         }
+         .card-title {
+         font-size: 20px;
+         font-weight: bold;
+         margin-bottom: 10px;
+         }
+         .card-description {
+         font-size: 16px;
+         margin-bottom: 10px;
+         }
+         .card-price {
+         font-size: 18px;
+         font-weight: bold;
+         margin-bottom: 10px;
+       
+         }
+         .card-button {
+         display: block;
+         width: 100%;
+         padding: 10px;
+         border: none;
+         background-color: #000;
+         color: #fff;
+         font-size: 16px;
+         font-weight: bold;
+         text-align: center;
+         border-bottom-left-radius: 5px;
+         border-bottom-right-radius: 5px;
+         text-decoration: none;
+           margin-top: 10px;
+         }
+         .card-button:hover {
+         background-color: #333;
+         }
+         .content{
+         font-size:40px;
+         }
+         .btn-outline-secondary {
+         color: black;
+         }
+         icon-shape {
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         text-align: center;
+         vertical-align: middle;
+         }
+         .icon-sm {
+         width: 2rem;
+         height: 2rem;
+         }
+         .input-group{
+        right: 126px;
+        top: -9px;
+         }
+         .divcontent{
+            margin-top: 4%;
+         }
+       
+      
+      </style>
+   </head>
+   <body>
+      <div class="divcontent">
+         <p  class="content">Main Inventory Product</p>
+      </div>
+      <hr >
+      <div class="container">
+      <div class="card">
+         <img src="https://imagekit.io/blog/content/images/2019/12/image-optimization.jpg" alt="Product Image">
+         <div class="card-content">
+            <h2 class="product_name font-bold">Product Name</h2>
+            <p class="description">Product Description</p>
+            <p class="price">Rs.XXXX</p>
+            <p class="price">Qt.XX</p>
+            <button class="card-button rounded p-2">Add to Cart</button>
+         </div>
+      </div>
+
+
+      <div class="card">
+         <img src="https://imagekit.io/blog/content/images/2019/12/image-optimization.jpg" alt="Product Image">
+         <div class="card-content">
+            <h2 class="product_name font-bold">Product Name</h2>
+            <p class="description">Product Description</p>
+            <p class="price">Rs.XXXX</p>
+            <p class="price">Qt.XX</p>
+            <button class="card-button rounded p-2">Add to cart</button>
+         </div>
+      </div>
+
+</div>
+   </body>
+</html>
+{% endblock %}

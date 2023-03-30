@@ -1,0 +1,23 @@
+# Login route
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Get the form data
+        username = request.form['username']
+        password = request.form['password']
+
+        # Get the user's Ethereum address from the smart contract
+        user_address = contract_instance.functions.getAddress(username).call()
+
+        # Check if the password and username match the Ethereum address
+        if web3.personal.unlockAccount(user_address, password, unlock_duration=300):
+            # Login the user and redirect to the home page
+            session['user_address'] = user_address
+            return redirect(url_for('home'))
+        else:
+            # Show an error message if the password is incorrect
+            flash('Incorrect username or password')
+            return redirect(url_for('login'))
+    else:
+        # Show the login form
+        return render_template('login.html')

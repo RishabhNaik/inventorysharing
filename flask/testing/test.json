@@ -1,0 +1,129 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			},
+			{
+				"internalType": "enum UserRegistry.UserType",
+				"name": "userType",
+				"type": "uint8"
+			}
+		],
+		"name": "registerUser",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "enum UserRegistry.UserType",
+				"name": "userType",
+				"type": "uint8"
+			}
+		],
+		"name": "UserRegistered",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			}
+		],
+		"name": "getUser",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					},
+					{
+						"internalType": "enum UserRegistry.UserType",
+						"name": "userType",
+						"type": "uint8"
+					}
+				],
+				"internalType": "struct UserRegistry.User",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"name": "usernameToUserIndex",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "users",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			},
+			{
+				"internalType": "enum UserRegistry.UserType",
+				"name": "userType",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

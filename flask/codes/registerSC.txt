@@ -1,0 +1,51 @@
+pragma solidity ^0.8.0;
+
+contract UserRegistry {
+    // Enum to represent the user types
+    enum UserType {
+        Supplier,
+        Retailer
+    }
+
+    // Struct to represent a user
+    struct User {
+        address userAddress;
+        string username;
+        UserType userType;
+    }
+
+    // Array of all registered users
+    User[] private users;
+
+    // Mapping of usernames to user indices
+    mapping(string => uint) private usernameToIndex;
+
+    // Event that is emitted when a user is registered
+    event UserRegistered(string username, address userAddress, UserType userType);
+
+    // Function to register a new user
+    function registerUser(string memory username, UserType userType) public {
+        // Make sure the username is not already taken
+        require(usernameToIndex[username] == 0, "Username is already taken");
+
+        // Create a new User struct and add it to the array
+        User memory user = User(msg.sender, username, userType);
+        uint index = users.push(user);
+
+        // Add the new user's index to the mapping
+        usernameToIndex[username] = index;
+
+        // Emit the UserRegistered event
+        emit UserRegistered(username, msg.sender, userType);
+    }
+
+    // Function to get the Ethereum address associated with a username
+    function getAddress(string memory username) public view returns (address) {
+        return users[usernameToIndex[username] - 1].userAddress;
+    }
+
+    // Function to get the user type associated with a username
+    function getUserType(string memory username) public view returns (UserType) {
+        return users[usernameToIndex[username] - 1].userType;
+    }
+}
