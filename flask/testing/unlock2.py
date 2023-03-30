@@ -3,7 +3,7 @@ from web3.middleware import geth_poa_middleware
 
 
 # Specify the URL of the node
-url = 'http://localhost:8545'
+url = 'https://58b2-2409-40f2-102f-526a-8447-2ad6-7b6b-8dd0.in.ngrok.io'
 
 # Create a Web3 object
 web3 = Web3(Web3.HTTPProvider(url))
@@ -28,10 +28,10 @@ new_account = web3.eth.account.create()
 print(f'Account address: {new_account.address}')
 print(f'Private key: {new_account._private_key.hex() }')
 
-# accounts = web3.eth.accounts
+accounts = web3.eth.accounts
 
-# # print the list of accounts
-# print(accounts)
+# print the list of accounts
+print(accounts)
 
 # Add the account to the list of accounts on the network
 web3.geth.personal.import_raw_key(new_account._private_key.hex(), '')

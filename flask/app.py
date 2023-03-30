@@ -8,7 +8,7 @@ app.secret_key='xavi3r'
 app.debug=True
 
 # Connect to web3 provider
-w3 = Web3(HTTPProvider('https://99cf-157-45-38-25.in.ngrok.io'))
+w3 = Web3(HTTPProvider('https://c533-2409-40f2-102f-526a-8447-2ad6-7b6b-8dd0.in.ngrok.io'))
 w3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
 # Define the contract ABI and address
@@ -18,7 +18,7 @@ with open('truffle/build/contracts/UserRegistry.json', 'r') as abi_definition:
 abi = info_abi['abi']  # Paste the ABI of the UserRegistry contract here
 
 # Paste the address of the UserRegistry contract here
-contract_address = '0xF52b9E99074b9475dB85762246eA8eBF69E5822a'
+contract_address = '0xD38A3E4F7c5ff3315cf95758C905e5Ab7Bd32866'
 
 # Get the contract instance
 contract_instance = w3.eth.contract(address=contract_address, abi=abi)
