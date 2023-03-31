@@ -8,21 +8,20 @@ app.secret_key='xavi3r'
 app.debug=True
 
 # Connect to web3 provider
-w3 = Web3(HTTPProvider('https://c533-2409-40f2-102f-526a-8447-2ad6-7b6b-8dd0.in.ngrok.io'))
+w3 = Web3(HTTPProvider('http://127.0.0.1:8545'))
 w3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
-# Define the contract ABI and address
+# # Define the contract ABI and address
 with open('truffle/build/contracts/UserRegistry.json', 'r') as abi_definition:
     info_abi = json.load(abi_definition)
 
 abi = info_abi['abi']  # Paste the ABI of the UserRegistry contract here
 
 # Paste the address of the UserRegistry contract here
-contract_address = '0xD38A3E4F7c5ff3315cf95758C905e5Ab7Bd32866'
+contract_address = '0xf33C0417B13ef50154E11E669FDD0afdb8C54AfF'
 
-# Get the contract instance
+#contract instance
 contract_instance = w3.eth.contract(address=contract_address, abi=abi)
-
 
 # Define a function to verify the password
 
@@ -52,6 +51,8 @@ def login():
         if verify_password(username, password):
             # Store the username in the session
             session['username'] = username
+            user_type = contract_instance.functions.getUserType(username).call()
+            session['usertype']=user_type
             return redirect(url_for('home'))
         else:
             error = 'Invalid username or password'
@@ -107,10 +108,11 @@ def home():
     username = session.get('username')
     if username:
         # Get the user type
-        user_type = contract_instance.functions.getUserType(username).call()
-        return render_template('home.html', username=username, user_type=user_type)
+        
+        return render_template('home.html', username=username)
     else:
         return redirect(url_for('login'))
+    return render_template('login.html')
 
 # Define the logout route
 
@@ -121,10 +123,25 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
-@app.route('/s_add_item')
-def s_add_item():
 
-    return render_template("s_add_item.html")
+@app.route('/s_add_item', methods=['GET', 'POST'])
+def s_add_item():
+    if request.method == 'POST':
+        # Get the form data
+        product_name = request.form['product_name']
+        product_number = request.form['product_number']
+        price = request.form['price']
+        quantity = request.form['quantity']
+        description = request.form['description']
+        # image = request.form['image']
+        my_list = [product_name, product_number, price, quantity, description]
+
+        # print(my_list)
+
+        return render_template('s_add_item.html', my_list=my_list)
+    else:
+        error = 'Invalid data'
+        return render_template('s_add_item.html', error=error)
 
 
 @app.route('/s_item_view')
@@ -165,3 +182,17 @@ def s_inventory():
 def checkout_page():
 
     return render_template("checkout_page.html")
+
+@app.route('/create_session')
+def create_session():
+    session['name'] = 'Gagz'
+    session['username']='Gagz'
+    session['usertype']='Supplier'
+    # session['logged_in']= True
+
+    return redirect(url_for('login'))
+
+@app.route('/destroy_session')
+def destroy_session():
+    session.clear()
+    return redirect(url_for('login'))

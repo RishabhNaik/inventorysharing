@@ -3,8 +3,7 @@ from web3.middleware import geth_poa_middleware
 
 
 # Specify the URL of the node
-url = 'https://58b2-2409-40f2-102f-526a-8447-2ad6-7b6b-8dd0.in.ngrok.io'
-
+url = 'https://1e82-2409-40f2-102f-526a-8447-2ad6-7b6b-8dd0.in.ngrok.io'
 # Create a Web3 object
 web3 = Web3(Web3.HTTPProvider(url))
 web3.middleware_onion.inject(geth_poa_middleware, layer=0)
