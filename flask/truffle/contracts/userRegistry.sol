@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract UserRegistry {
-    enum UserType {
+ enum UserType {
         None,
         Supplier,
         Retailer
     }
+
+contract UserRegistry {
+   
 
     struct User {
         address userAddress;

@@ -1,5 +1,8 @@
-var userRegistry = artifacts.require("./userRegistry.sol");
+const UserRegistry = artifacts.require("UserRegistry");
+const ProductRegistry = artifacts.require("ProductRegistry");
 
-module.exports = function (deployer) {
-  deployer.deploy(userRegistry);
+module.exports = async function (deployer) {
+  await deployer.deploy(UserRegistry);
+  const userRegistryInstance = await UserRegistry.deployed();
+  await deployer.deploy(ProductRegistry, userRegistryInstance.address);
 };

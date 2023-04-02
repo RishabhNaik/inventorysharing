@@ -1,31 +1,23 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from web3 import Web3, HTTPProvider
 from web3.middleware import geth_poa_middleware
+from user import user_contract_address,user_abi
 import json
 
 app = Flask(__name__)
-app.secret_key='xavi3r'
-app.debug=True
+app.secret_key = 'xavi3r'
+app.debug = True
 
 # Connect to web3 provider
 w3 = Web3(HTTPProvider('http://127.0.0.1:8545'))
 w3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
-# # Define the contract ABI and address
-with open('truffle/build/contracts/UserRegistry.json', 'r') as abi_definition:
-    info_abi = json.load(abi_definition)
+# contract instance
+user_contract = w3.eth.contract(address=contract_address, abi=abi)
 
-abi = info_abi['abi']  # Paste the ABI of the UserRegistry contract here
 
-# Paste the address of the UserRegistry contract here
-contract_address = '0xf33C0417B13ef50154E11E669FDD0afdb8C54AfF'
-
-#contract instance
-contract_instance = w3.eth.contract(address=contract_address, abi=abi)
 
 # Define a function to verify the password
-
-
 def verify_password(username, password):
     # Get the Ethereum address associated with the username
     address = contract_instance.functions.getAddress(username).call()
@@ -51,8 +43,9 @@ def login():
         if verify_password(username, password):
             # Store the username in the session
             session['username'] = username
-            user_type = contract_instance.functions.getUserType(username).call()
-            session['usertype']=user_type
+            user_type = contract_instance.functions.getUserType(
+                username).call()
+            session['usertype'] = user_type
             return redirect(url_for('home'))
         else:
             error = 'Invalid username or password'
@@ -70,7 +63,8 @@ def register():
         user_type = request.form['user_type']
         # Check if the username is already taken
         try:
-            existing_user = contract_instance.functions.getUser(username).call()
+            existing_user = contract_instance.functions.getUser(
+                username).call()
             error = 'Username is already taken'
             return render_template('register.html', error=error)
         except:
@@ -108,7 +102,7 @@ def home():
     username = session.get('username')
     if username:
         # Get the user type
-        
+
         return render_template('home.html', username=username)
     else:
         return redirect(url_for('login'))
@@ -117,7 +111,7 @@ def home():
 # Define the logout route
 
 
-@app.route('/logout', methods=['GET','POST'])
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
     # Remove the username from the session
     session.clear()
@@ -149,6 +143,7 @@ def s_item_view():
 
     return render_template("s_item_view.html")
 
+
 @app.route('/profile')
 def profile():
 
@@ -159,6 +154,7 @@ def profile():
 def demo():
 
     return render_template("demo.html")
+
 
 @app.route('/cart')
 def cart():
@@ -183,16 +179,22 @@ def checkout_page():
 
     return render_template("checkout_page.html")
 
+
 @app.route('/create_session')
 def create_session():
     session['name'] = 'Gagz'
-    session['username']='Gagz'
-    session['usertype']='Supplier'
+    session['username'] = 'Gagz'
+    session['usertype'] = 'Supplier'
     # session['logged_in']= True
 
     return redirect(url_for('login'))
+
 
 @app.route('/destroy_session')
 def destroy_session():
     session.clear()
     return redirect(url_for('login'))
+
+
+if __name__ == '__main__':
+    app.run(use_reloader=True)
